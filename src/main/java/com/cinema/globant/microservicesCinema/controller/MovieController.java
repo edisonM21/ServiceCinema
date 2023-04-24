@@ -1,5 +1,6 @@
 package com.cinema.globant.microservicesCinema.controller;
-import com.cinema.globant.microservicesCinema.dto.Movies;
+import com.cinema.globant.microservicesCinema.dto.details.Details;
+import com.cinema.globant.microservicesCinema.dto.movies.Movies;
 import com.cinema.globant.microservicesCinema.services.MovieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,7 +30,7 @@ public class MovieController {
         return new ResponseEntity<>(movieService.getMoviesNow_Playing(), HttpStatus.OK);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<List<Movies>> getDetails(@PathVariable("id")Integer id){
+    public ResponseEntity<List<Details>> getDetails(@PathVariable("id")Integer id){
         return new ResponseEntity<>(movieService.getMoviesDetails(id), HttpStatus.OK);
     }
 }

@@ -1,5 +1,6 @@
-package com.cinema.globant.microservicesCinema.dto;
+package com.cinema.globant.microservicesCinema.dto.movies;
 
+import com.cinema.globant.microservicesCinema.dto.details.Genre;
 import lombok.Data;
 
 import java.util.ArrayList;
