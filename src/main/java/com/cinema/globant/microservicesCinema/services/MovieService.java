@@ -1,5 +1,6 @@
 package com.cinema.globant.microservicesCinema.services;
 
+import com.cinema.globant.microservicesCinema.dto.cast.Root;
 import com.cinema.globant.microservicesCinema.dto.details.Details;
 import com.cinema.globant.microservicesCinema.dto.movies.Movies;
 import lombok.RequiredArgsConstructor;
@@ -24,22 +25,14 @@ public class MovieService {
 
 
 
-    public List<Movies> getMoviesPopular(){
-        try {
-            Movies response = restTemplate.getForObject(basePath+"/popular"+Key,Movies.class);
-            return Arrays.asList(response);
-        }catch (Exception e){
-            System.out.println("Error: No se encontraron las peliculas populares"+e);
-        }
-        return null;
-    }
+    //return (List<Movies>) ResponseEntity.noContent().build();
 
     public List<Movies> getMoviesNow_Playing(){
         try {
             Movies response = restTemplate.getForObject(basePath+"/now_playing"+Key,Movies.class);
             return Arrays.asList(response);
         }catch (Exception e) {
-            System.out.println("Error: No se encontraron los nuevos estrenos");
+            System.out.println("Error: No se encontraron los nuevos estrenos"+e.getMessage());
         }
         return null;
     }
@@ -49,7 +42,16 @@ public class MovieService {
             Details response = restTemplate.getForObject(basePath+"/"+id+Key,Details.class);
             return Arrays.asList(response);
         }catch (Exception e){
-            System.out.println("Error: No se encontro la pelicula");
+            System.out.println("Error: No se encontro la pelicula"+e.getMessage());
+        }
+        return null;
+    }
+    public List<Root> getCast(Integer id){
+        try {
+            Root response = restTemplate.getForObject(basePath+"/"+id+"/credits"+Key,Root.class);
+            return Arrays.asList(response);
+        }catch (Exception e){
+            System.out.println("Error: No se encontro los cast"+e.getMessage());
         }
         return null;
     }
