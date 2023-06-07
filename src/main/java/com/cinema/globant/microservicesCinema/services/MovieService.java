@@ -1,5 +1,4 @@
 package com.cinema.globant.microservicesCinema.services;
-import com.cinema.globant.microservicesCinema.dto.cast.Root;
 import com.cinema.globant.microservicesCinema.dto.details.Details;
 import com.cinema.globant.microservicesCinema.dto.movies.Movies;
 import lombok.RequiredArgsConstructor;
@@ -16,31 +15,37 @@ public class MovieService {
     private final RestTemplate restTemplate;
 
     @Value("${spring.external.service.base-url}")
-    private String basePath;
+    private String basePathDetails;
 
-    private String basePath2="https://api.themoviedb.org/3/discover";
+    @Value("${spring.external.service.base-url2}")
+    private String basePathDiscover;
 
-    private String Key="?api_key=dd31822780bb1812b4ec7f453bc35aa8";
+    private String Key = "&api_key=dd31822780bb1812b4ec7f453bc35aa8";
+    private String Key1 = "?api_key=dd31822780bb1812b4ec7f453bc35aa8";
 
 
-    public List<Movies> getDiscover(){
+    public List <Movies> getDiscover (String region, String release_date, float vote_average){
+
         try {
-            Movies response = restTemplate.getForObject(basePath2+"/movie"+Key,Movies.class);
+            Movies response = restTemplate.getForObject(basePathDiscover+"/movie?region="+region+"&release_date.gte="+release_date+"&vote_average.gte="+vote_average+Key,Movies.class);
             return Arrays.asList(response);
+
         }catch (Exception e) {
             e.printStackTrace(System.out);
-            System.out.println("Error: No se encontraron los nuevos estrenos"+e);
+            
         }
         return null;
     }
 
-    public List<Details> getMoviesDetails(Integer id){
+    public List <Details> getMoviesDetails (Integer id){
+
         try {
-            Details response = restTemplate.getForObject(basePath+"/"+id+Key,Details.class);
+            Details response = restTemplate.getForObject(basePathDetails+"/"+id+Key1,Details.class);
             return Arrays.asList(response);
+
         }catch (Exception e){
             e.printStackTrace(System.out);
-            System.out.println("Error: No se encontro la pelicula" +e);
+
         }
         return null;
     }

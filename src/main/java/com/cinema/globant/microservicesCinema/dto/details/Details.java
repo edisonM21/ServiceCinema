@@ -3,6 +3,7 @@ package com.cinema.globant.microservicesCinema.dto.details;
 import java.util.ArrayList;
 
 public class Details {
+
     public boolean adult;
     public String backdrop_path;
     public Object belongs_to_collection;
