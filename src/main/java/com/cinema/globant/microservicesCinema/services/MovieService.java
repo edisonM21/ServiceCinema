@@ -18,12 +18,14 @@ public class MovieService {
     @Value("${spring.external.service.base-url}")
     private String basePath;
 
-    private String Key="?api_key=99632828d29e9522db0e54fd17194222";
+    private String basePath2="https://api.themoviedb.org/3/discover";
+
+    private String Key="?api_key=dd31822780bb1812b4ec7f453bc35aa8";
 
 
-    public List<Movies> getMoviesNow_Playing(){
+    public List<Movies> getDiscover(){
         try {
-            Movies response = restTemplate.getForObject(basePath+"/now_playing"+Key,Movies.class);
+            Movies response = restTemplate.getForObject(basePath2+"/movie"+Key,Movies.class);
             return Arrays.asList(response);
         }catch (Exception e) {
             e.printStackTrace(System.out);
@@ -39,16 +41,6 @@ public class MovieService {
         }catch (Exception e){
             e.printStackTrace(System.out);
             System.out.println("Error: No se encontro la pelicula" +e);
-        }
-        return null;
-    }
-    public List<Root> getCast(Integer id){
-        try {
-            Root response = restTemplate.getForObject(basePath+"/"+id+"/credits"+Key,Root.class);
-            return Arrays.asList(response);
-        }catch (Exception e){
-            e.printStackTrace(System.out);
-            System.out.println("Error: No se encontro los cast"+e);
         }
         return null;
     }
