@@ -4,7 +4,7 @@ import lombok.Data;
 
 import java.util.ArrayList;
 @Data
-public class Movies {
+public class Response {
 
     public int page;
     public ArrayList<Result> results;

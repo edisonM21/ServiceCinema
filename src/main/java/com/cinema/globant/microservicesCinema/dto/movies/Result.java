@@ -1,5 +1,7 @@
 package com.cinema.globant.microservicesCinema.dto.movies;
 
+import lombok.Data;
+
 import java.util.ArrayList;
 
 public class Result {
@@ -18,6 +20,6 @@ public class Result {
     public boolean video;
     public double vote_average;
     public int vote_count;
-
+    public boolean nowPlaying = false;
 
 }
