@@ -3,6 +3,7 @@ import com.cinema.globant.microservicesCinema.dto.details.Details;
 import com.cinema.globant.microservicesCinema.dto.movies.Result;
 import com.cinema.globant.microservicesCinema.services.MovieService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MovieController {
 
-    private final MovieService movieService;
+    @Autowired
+    private  MovieService movieService;
 
 
     @GetMapping("/discover/{region}/{release_date}/{vote_average}")

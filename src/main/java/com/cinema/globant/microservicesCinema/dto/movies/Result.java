@@ -1,9 +1,14 @@
 package com.cinema.globant.microservicesCinema.dto.movies;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 
+@Getter
+@Setter
+@Data
 public class Result {
 
     public boolean adult;
