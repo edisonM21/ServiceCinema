@@ -1,6 +1,7 @@
 package com.cinema.globant.microservicesCinema.controller;
 import com.cinema.globant.microservicesCinema.dto.details.Details;
 import com.cinema.globant.microservicesCinema.dto.movies.Result;
+import com.cinema.globant.microservicesCinema.entities.ResultEntity;
 import com.cinema.globant.microservicesCinema.services.MovieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,5 +28,15 @@ public class MovieController {
     @GetMapping("/{id}")
     public ResponseEntity <List<Details>> getDetails (@PathVariable Integer id){
         return new ResponseEntity(movieService.getMoviesDetails(id), HttpStatus.OK);
+    }
+
+    @PostMapping("/save")
+    public ResponseEntity<?> saveResult(ResultEntity result){
+        try {
+            return new ResponseEntity(movieService.saveEntity(result),HttpStatus.CREATED);
+        }catch (Exception e){
+            return new ResponseEntity<String>(e.getCause().toString(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 }

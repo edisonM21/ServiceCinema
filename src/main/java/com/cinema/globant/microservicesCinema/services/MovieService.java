@@ -1,4 +1,5 @@
 package com.cinema.globant.microservicesCinema.services;
+
 import com.cinema.globant.microservicesCinema.dto.details.Details;
 import com.cinema.globant.microservicesCinema.dto.movies.Response;
 import com.cinema.globant.microservicesCinema.dto.movies.Result;
@@ -7,6 +8,8 @@ import com.cinema.globant.microservicesCinema.repositories.RepositoryResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -16,13 +19,13 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class MovieService{
+public class MovieService {
 
 
     @Autowired
     RepositoryResult repositoryResult;
     @Autowired
-    private  RestTemplate restTemplate;
+    private RestTemplate restTemplate;
 
     @Value("${spring.external.service.base-url}")
     private String basePathDetails;
@@ -30,24 +33,23 @@ public class MovieService{
     @Value("${spring.external.service.base-url2}")
     private String basePathDiscover;
 
-    private String Key = "&api_key=dd31822780bb1812b4ec7f453bc35aa8";
+    @Value("${spring.external.service.base-key}")
+    private String Key;
 
-    private String Key1 = "?api_key=dd31822780bb1812b4ec7f453bc35aa8";
+    @Value("${spring.external.service.base-key2}")
+    private String Key1;
 
 
-    public List<Result> getMovieList (String region, String release_date, float vote_average){
+    public List<Result> getMovieList(String region, String release_date, float vote_average) {
 
         try {
-            List <Result> resultList = new ArrayList<>();
-            //TODO: Change response object for JSONObject
-            Response response = restTemplate.getForObject(basePathDiscover+"/movie?region="+region+"&release_date.gte="+release_date+"&vote_average.gte="+vote_average+Key, Response.class);
+            List<Result> resultList = new ArrayList<>();
+            Response response = restTemplate.getForObject(basePathDiscover + "/movie?region=" + region + "&release_date.gte=" + release_date + "&vote_average.gte=" + vote_average + Key, Response.class);
             if (response != null) {
                 resultList.addAll(response.results);
 
-                ResultEntity entity = new ResultEntity();
-
-                ArrayList<Result> result = response.getResults();
-                for (Result item : result){
+                for (Result item : response.getResults()) {
+                    ResultEntity entity = new ResultEntity();
                     entity.setAdult(item.isAdult());
                     entity.setBackdrop_path(item.getBackdrop_path());
                     entity.setId(item.getId());
@@ -65,19 +67,23 @@ public class MovieService{
                 }
             }
             return resultList;
-        }catch (Exception e) {
-            e.printStackTrace(System.out);
+        } catch (Exception e) {
+            return (List<Result>) new ResponseEntity<String>(e.getCause().toString(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return null;
     }
 
-    public List <Details> getMoviesDetails (Integer id){
+    public ResultEntity saveEntity(ResultEntity resultEntity) {
+        return repositoryResult.save(resultEntity);
+    }
+
+
+    public List<Details> getMoviesDetails(Integer id) {
 
         try {
-            Details response = restTemplate.getForObject(basePathDetails+"/"+id+Key1,Details.class);
+            Details response = restTemplate.getForObject(basePathDetails + "/" + id + Key1, Details.class);
             return Arrays.asList(response);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace(System.out);
 
         }
