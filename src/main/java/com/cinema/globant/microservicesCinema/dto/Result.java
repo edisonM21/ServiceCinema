@@ -1,4 +1,4 @@
-package com.cinema.globant.microservicesCinema.dto.movies;
+package com.cinema.globant.microservicesCinema.dto;
 
 import lombok.Data;
 import lombok.Getter;
