@@ -11,7 +11,5 @@ import java.util.List;
 
 @Repository
 public interface RepositoryResult extends JpaRepository<ResultEntity,Long>{
-
-   // @Query("SELECT * FROM moviesResult WHERE original_language = en")
-    //List<ResultEntity> findByVariable(@Param("original_language")String original_language);
+    List<ResultEntity> findAllByNowPlaying(boolean nowPlaying);
 }

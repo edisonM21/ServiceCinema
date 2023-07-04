@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class MovieService{
+public class MovieService {
     @Autowired
     RepositoryResult repositoryResult;
     @Autowired
@@ -44,6 +44,14 @@ public class MovieService{
 
     public Optional<ResultEntity> getMovieById(long id) {
         return repositoryResult.findById(id);
+    }
+
+    public List<ResultEntity> getNowPlaying(){
+        return repositoryResult.findAllByNowPlaying(true);
+    }
+
+    public List<ResultEntity> getPremiere(){
+        return repositoryResult.findAllByNowPlaying(false);
     }
 
     public List<ResultEntity> saveMovie(List<ResultEntity> movie) {

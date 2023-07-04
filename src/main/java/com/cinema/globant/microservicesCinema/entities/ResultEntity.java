@@ -1,6 +1,8 @@
 package com.cinema.globant.microservicesCinema.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
@@ -14,30 +16,50 @@ import java.util.ArrayList;
 @Entity
 @Table(name = "moviesResult")
 public class ResultEntity {
-
-
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     public long movie;
+    @NotNull
     public boolean adult;
+    @NotNull
+    @NotBlank
     public String backdrop_path;
+    @NotNull
     public ArrayList<Integer> genre_ids;
+    @NotNull
     public int id;
+    @NotNull
+    @NotBlank
     public String original_language;
+    @NotNull
+    @NotBlank
     public String original_title;
+    @NotNull
+    @NotBlank
     @Column(length = 1000)
     public String overview;
+    @NotNull
     public double popularity;
+    @NotNull
+    @NotBlank
     public String poster_path;
+    @NotNull
+    @NotBlank
     public String release_date;
+    @NotNull
+    @NotBlank
     public String title;
+    @NotNull
     public boolean video;
+    @NotNull
     public double vote_average;
+    @NotNull
     public int vote_count;
+    @NotNull
     public boolean nowPlaying = false;
 
-    public ResultEntity(){
+    public ResultEntity() {
 
     }
 
