@@ -1,8 +1,7 @@
 package com.cinema.globant.microservicesCinema.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
@@ -23,38 +22,42 @@ public class ResultEntity {
     @NotNull
     public boolean adult;
     @NotNull
-    @NotBlank
+    @NotEmpty
     public String backdrop_path;
     @NotNull
     public ArrayList<Integer> genre_ids;
     @NotNull
+    @Min(value = 1)
     public int id;
     @NotNull
-    @NotBlank
+    @NotEmpty
     public String original_language;
     @NotNull
-    @NotBlank
+    @NotEmpty
     public String original_title;
     @NotNull
-    @NotBlank
+    @NotEmpty
     @Column(length = 1000)
     public String overview;
     @NotNull
+    @DecimalMin(value = "0.1")
     public double popularity;
     @NotNull
-    @NotBlank
+    @NotEmpty
     public String poster_path;
     @NotNull
-    @NotBlank
+    @NotEmpty
     public String release_date;
     @NotNull
-    @NotBlank
+    @NotEmpty
     public String title;
     @NotNull
     public boolean video;
     @NotNull
+    @DecimalMin(value = "0.1")
     public double vote_average;
     @NotNull
+    @Min(value = 0)
     public int vote_count;
     @NotNull
     public boolean nowPlaying = false;

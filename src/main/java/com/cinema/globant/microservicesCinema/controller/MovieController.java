@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -31,16 +32,16 @@ public class MovieController {
         try {
             return new ResponseEntity(movieService.getMovieList(region, release_date, vote_average), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity(e.getCause().toString(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity(e.getCause().toString(), HttpStatus.NOT_FOUND);
         }
     }
 
     @GetMapping("/getAll")
-    private ResponseEntity<ArrayList<ResultEntity>> getAllMovies() {
+    private ResponseEntity<List<ResultEntity>> getAllMovies() {
         try {
             return new ResponseEntity(movieService.getAllMovies(), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity(e.getCause().toString(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity(e.getCause().toString(), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -49,7 +50,7 @@ public class MovieController {
         try {
             return new ResponseEntity(movieService.getMovieById(id), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity(e.getCause().toString(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity(e.getCause().toString(), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -58,7 +59,7 @@ public class MovieController {
         try {
             return new ResponseEntity(movieService.getNowPlaying(), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity(e.getCause().toString(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity(e.getCause().toString(), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -67,7 +68,7 @@ public class MovieController {
         try {
             return new ResponseEntity(movieService.getPremiere(), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity(e.getCause().toString(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity(e.getCause().toString(), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -77,12 +78,12 @@ public class MovieController {
             movieService.saveMovie(movie);
             return ResponseEntity.status(HttpStatus.CREATED).body("Peliculas Guardada Exitosamente");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error Guardando la pelicula verifique los campos");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error Guardando la pelicula verifique los campos");
         }
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<ResultEntity> update(@PathVariable("id") long id, @RequestBody ResultEntity entity) {
+    public ResponseEntity<ResultEntity> update(@Valid @PathVariable("id") long id, @RequestBody ResultEntity entity) {
         Optional<ResultEntity> MoviesData = repositoryResult.findById(id);
         if (MoviesData.isPresent()) {
             ResultEntity movies = MoviesData.get();
@@ -104,7 +105,7 @@ public class MovieController {
 
             return new ResponseEntity<>(repositoryResult.save(movies), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 }

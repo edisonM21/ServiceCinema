@@ -38,8 +38,8 @@ public class MovieService {
         return resultList;
     }
 
-    public ArrayList<ResultEntity> getAllMovies() {
-        return (ArrayList<ResultEntity>) repositoryResult.findAll();
+    public List<ResultEntity> getAllMovies() {
+        return repositoryResult.findAll();
     }
 
     public Optional<ResultEntity> getMovieById(long id) {
