@@ -2,8 +2,9 @@ package com.cinema.globant.microservicesCinema.services;
 
 import com.cinema.globant.microservicesCinema.dto.Response;
 import com.cinema.globant.microservicesCinema.dto.Result;
-import com.cinema.globant.microservicesCinema.entities.ResultEntity;
-import com.cinema.globant.microservicesCinema.repositories.RepositoryResult;
+import com.cinema.globant.microservicesCinema.entities.Movie;
+import com.cinema.globant.microservicesCinema.exceptions.MovieNotFoundException;
+import com.cinema.globant.microservicesCinema.repositories.RepositoryMovie;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,13 +12,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class MovieService {
     @Autowired
-    RepositoryResult repositoryResult;
+    RepositoryMovie repositoryMovie;
     @Autowired
     private RestTemplate restTemplate;
 
@@ -38,23 +38,25 @@ public class MovieService {
         return resultList;
     }
 
-    public List<ResultEntity> getAllMovies() {
-        return repositoryResult.findAll();
+    public List<Movie> getAllMovies() {
+        return repositoryMovie.findAll();
     }
 
-    public Optional<ResultEntity> getMovieById(long id) {
-        return repositoryResult.findById(id);
+    public Movie getMovieById(long id) {
+        return repositoryMovie
+                .findById(id)
+                .orElseThrow(()-> new MovieNotFoundException(id));
     }
 
-    public List<ResultEntity> getNowPlaying(){
-        return repositoryResult.findAllByNowPlaying(true);
+    public List<Movie> getNowPlaying(){
+        return repositoryMovie.findAllByNowPlaying(true);
     }
 
-    public List<ResultEntity> getPremiere(){
-        return repositoryResult.findAllByNowPlaying(false);
+    public List<Movie> getPremiere(){
+        return repositoryMovie.findAllByNowPlaying(false);
     }
 
-    public List<ResultEntity> saveMovie(List<ResultEntity> movie) {
-        return repositoryResult.saveAll(movie);
+    public List<Movie> saveMovie(List<Movie> movie) {
+        return repositoryMovie.saveAll(movie);
     }
 }

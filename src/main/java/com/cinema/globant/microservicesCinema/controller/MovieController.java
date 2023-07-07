@@ -1,18 +1,16 @@
 package com.cinema.globant.microservicesCinema.controller;
 
 import com.cinema.globant.microservicesCinema.dto.Result;
-import com.cinema.globant.microservicesCinema.entities.ResultEntity;
-import com.cinema.globant.microservicesCinema.repositories.RepositoryResult;
+import com.cinema.globant.microservicesCinema.entities.Movie;
+import com.cinema.globant.microservicesCinema.repositories.RepositoryMovie;
 import com.cinema.globant.microservicesCinema.services.MovieService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +23,7 @@ public class MovieController {
     private MovieService movieService;
 
     @Autowired
-    private RepositoryResult repositoryResult;
+    private RepositoryMovie repositoryResult;
 
     @GetMapping("/{region}/{release_date}/{vote_average}")
     public ResponseEntity<List<Result>> getMovieList(@PathVariable String region, @PathVariable String release_date, @PathVariable float vote_average) {
@@ -36,57 +34,52 @@ public class MovieController {
         }
     }
 
-    @GetMapping("/getAll")
-    private ResponseEntity<List<ResultEntity>> getAllMovies() {
-        try {
-            return new ResponseEntity(movieService.getAllMovies(), HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity(e.getCause().toString(), HttpStatus.NOT_FOUND);
+    @GetMapping
+    private ResponseEntity<String> getAllMovies() {
+        List<Movie> movie = movieService.getAllMovies();
+        if (movie.isEmpty()){
+            return  ResponseEntity.status(HttpStatus.NOT_FOUND).body("No hay peliculas Guardadas");
         }
+        return new ResponseEntity(movie,HttpStatus.OK);
     }
 
-    @GetMapping("/get/{id}")
-    public ResponseEntity<Optional<ResultEntity>> getMovieById(@PathVariable("id") long id) {
-        try {
-            return new ResponseEntity(movieService.getMovieById(id), HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity(e.getCause().toString(), HttpStatus.NOT_FOUND);
-        }
+    @GetMapping("/{id}")
+    public ResponseEntity<Movie> getMovieById(@PathVariable("id") long id) {
+        return ResponseEntity.ok(movieService.getMovieById(id));
     }
 
     @GetMapping("/nowPlaying")
-    private ResponseEntity<List<ResultEntity>> getAllMoviesPlaying() {
-        try {
-            return new ResponseEntity(movieService.getNowPlaying(), HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity(e.getCause().toString(), HttpStatus.NOT_FOUND);
-        }
+    private ResponseEntity<String> getAllMoviesPlaying() {
+            List<Movie> movie = movieService.getNowPlaying();
+            if (movie.isEmpty()) {
+                return  ResponseEntity.status(HttpStatus.NOT_FOUND).body("No hay peliculas de nowPlaying");
+            }
+            return new ResponseEntity(movie,HttpStatus.OK);
     }
 
     @GetMapping("/premiere")
-    private ResponseEntity<List<ResultEntity>> getAllMoviesPremiere() {
-        try {
-            return new ResponseEntity(movieService.getPremiere(), HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity(e.getCause().toString(), HttpStatus.NOT_FOUND);
+    private ResponseEntity<String> getAllMoviesPremiere() {
+        List<Movie> movie = movieService.getPremiere();
+        if (movie.isEmpty()){
+            return  ResponseEntity.status(HttpStatus.NOT_FOUND).body("No hay peliculas de premiere");
         }
+        return new ResponseEntity(movie,HttpStatus.OK);
     }
 
     @PostMapping("/save")
-    public ResponseEntity<String> saveMovie(@Valid @RequestBody List<ResultEntity> movie) {
+    public ResponseEntity<String> saveMovie(@Valid @RequestBody List<Movie> movie) {
         try {
-            movieService.saveMovie(movie);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Peliculas Guardada Exitosamente");
+            return new ResponseEntity(movieService.saveMovie(movie), HttpStatus.CREATED);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error Guardando la pelicula verifique los campos");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Estas peliculas ya se han guardado o uno de tus campos es incorrecto");
         }
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<ResultEntity> update(@Valid @PathVariable("id") long id, @RequestBody ResultEntity entity) {
-        Optional<ResultEntity> MoviesData = repositoryResult.findById(id);
+    public ResponseEntity<Movie> update(@Valid @PathVariable("id") long id, @RequestBody Movie entity) {
+        Optional<Movie> MoviesData = repositoryResult.findById(id);
         if (MoviesData.isPresent()) {
-            ResultEntity movies = MoviesData.get();
+            Movie movies = MoviesData.get();
             movies.setAdult(entity.isAdult());
             movies.setBackdrop_path(entity.getBackdrop_path());
             movies.setGenre_ids(entity.getGenre_ids());
