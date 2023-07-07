@@ -2,6 +2,7 @@ package com.cinema.globant.microservicesCinema.controller;
 
 import com.cinema.globant.microservicesCinema.dto.Result;
 import com.cinema.globant.microservicesCinema.entities.Movie;
+import com.cinema.globant.microservicesCinema.exceptions.MovieNotFoundException;
 import com.cinema.globant.microservicesCinema.repositories.RepositoryMovie;
 import com.cinema.globant.microservicesCinema.services.MovieService;
 import jakarta.validation.Valid;
@@ -35,12 +36,12 @@ public class MovieController {
     }
 
     @GetMapping
-    private ResponseEntity<String> getAllMovies() {
+    private ResponseEntity<List<Movie>> getAllMovies() {
         List<Movie> movie = movieService.getAllMovies();
-        if (movie.isEmpty()){
-            return  ResponseEntity.status(HttpStatus.NOT_FOUND).body("No hay peliculas Guardadas");
+        if (movie.isEmpty()) {
+            throw new MovieNotFoundException(movie);
         }
-        return new ResponseEntity(movie,HttpStatus.OK);
+        return  ResponseEntity.ok(movie);
     }
 
     @GetMapping("/{id}")
@@ -49,21 +50,21 @@ public class MovieController {
     }
 
     @GetMapping("/nowPlaying")
-    private ResponseEntity<String> getAllMoviesPlaying() {
-            List<Movie> movie = movieService.getNowPlaying();
-            if (movie.isEmpty()) {
-                return  ResponseEntity.status(HttpStatus.NOT_FOUND).body("No hay peliculas de nowPlaying");
-            }
-            return new ResponseEntity(movie,HttpStatus.OK);
+    private ResponseEntity<List<Movie>> getAllMoviesPlaying() {
+        List<Movie> movie = movieService.getNowPlaying();
+        if (movie.isEmpty()) {
+            throw new MovieNotFoundException(movie);
+        }
+        return  ResponseEntity.ok(movie);
     }
 
     @GetMapping("/premiere")
-    private ResponseEntity<String> getAllMoviesPremiere() {
+    private ResponseEntity<List<Movie>> getAllMoviesPremiere() {
         List<Movie> movie = movieService.getPremiere();
-        if (movie.isEmpty()){
-            return  ResponseEntity.status(HttpStatus.NOT_FOUND).body("No hay peliculas de premiere");
+        if (movie.isEmpty()) {
+            throw new MovieNotFoundException(movie);
         }
-        return new ResponseEntity(movie,HttpStatus.OK);
+        return  ResponseEntity.ok(movie);
     }
 
     @PostMapping("/save")
