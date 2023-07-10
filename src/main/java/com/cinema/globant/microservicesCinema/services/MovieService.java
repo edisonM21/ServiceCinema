@@ -147,6 +147,68 @@ public class MovieService {
 //        .collect(Collectors.toList());
   }
 
+
+  // TODO: Tiene sentido el flag del API para saber si la película está siendo proyecteada?
+  // TODO: En el modelo de BD debe crearse entidades que reflejen la proyección de una película
+  // TODO: y si está en cartelera o no, podría ser con fechas de entrada y salida de cartelera de la película
+  public List<MovieResponseDto> getNowPlaying() {
+    List<Movie> movies = moviesRepository.findAllByNowPlaying(true);
+    // armar la lista convertida
+    List<MovieResponseDto> result = new ArrayList<>();
+    // se itera y se crea lista
+    for (Movie m : movies) {
+      // Ejercicio: Usar convertidor
+      result.add(MovieResponseDto
+              .builder()
+              .id(m.getId())
+              .originalTitle(m.getOriginalTitle())
+              .originalLanguage(m.getOriginalLanguage())
+              .localTitle(m.getTitle())
+              .overview(m.getOverview())
+              .isForAdults(m.getAdult())
+              .nowPlaying(m.getNowPlaying())
+              .releaseDate(m.getReleaseDate())
+              .apiId(m.getApiId())
+              .hasVideo(m.getVideo())
+              .popularity(m.getPopularity())
+              .voteAverage(m.getVoteAverage())
+              .voteCount(m.getVoteCount())
+              .build());
+    }
+    return result;
+  }
+
+  // TODO: Tiene sentido el flag del API para saber si la película está en estreno?
+  // TODO: En el modelo de BD debe crearse entidades que reflejen la proyección de una película
+  // TODO: y si está en cartelera o no, podría ser con fechas de entrada y salida de cartelera de la película
+
+  public List<MovieResponseDto> getPremiere() {
+    List<Movie> movies = moviesRepository.findAllByNowPlaying(false);
+    // armar la lista convertida
+    List<MovieResponseDto> result = new ArrayList<>();
+    // se itera y se crea lista
+    for (Movie m : movies) {
+      // Ejercicio: Usar convertidor
+      result.add(MovieResponseDto
+              .builder()
+              .id(m.getId())
+              .originalTitle(m.getOriginalTitle())
+              .originalLanguage(m.getOriginalLanguage())
+              .localTitle(m.getTitle())
+              .overview(m.getOverview())
+              .isForAdults(m.getAdult())
+              .nowPlaying(m.getNowPlaying())
+              .releaseDate(m.getReleaseDate())
+              .apiId(m.getApiId())
+              .hasVideo(m.getVideo())
+              .popularity(m.getPopularity())
+              .voteAverage(m.getVoteAverage())
+              .voteCount(m.getVoteCount())
+              .build());
+    }
+    return result;
+  }
+
   /**
    * Crea una nueva película
    * <p>
@@ -263,20 +325,6 @@ public class MovieService {
     // Ejercicio Crear convertidor Result --> Movie
     // Crear ciclo con map, usando el convertidor creado en el paso anterior
     return resultList;
-  }
-
-  // TODO: Tiene sentido el flag del API para saber si la película está siendo proyecteada?
-  // TODO: En el modelo de BD debe crearse entidades que reflejen la proyección de una película
-  // TODO: y si está en cartelera o no, podría ser con fechas de entrada y salida de cartelera de la película
-  public List<Movie> getNowPlaying() {
-    return moviesRepository.findAllByNowPlaying(true);
-  }
-
-  // TODO: Tiene sentido el flag del API para saber si la película está en estreno?
-  // TODO: En el modelo de BD debe crearse entidades que reflejen la proyección de una película
-  // TODO: y si está en cartelera o no, podría ser con fechas de entrada y salida de cartelera de la película
-  public List<Movie> getPremiere() {
-    return moviesRepository.findAllByNowPlaying(false);
   }
 
   //TODO: Recibe una lista de DTO de request de películas

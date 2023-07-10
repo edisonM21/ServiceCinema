@@ -54,6 +54,16 @@ public class MovieController {
     return ResponseEntity.ok(movieService.getAllList());
   }
 
+  @GetMapping("/nowPlaying")
+  public ResponseEntity<List<MovieResponseDto>> getAllMoviesPlaying() {
+    return  ResponseEntity.ok(movieService.getNowPlaying());
+  }
+
+  @GetMapping("/premiere")
+  public ResponseEntity<List<MovieResponseDto>> getAllPremiere() {
+    return ResponseEntity.ok(movieService.getPremiere());
+  }
+
   /**
    * Devuelve película por Id
    *
@@ -180,22 +190,8 @@ public class MovieController {
     }
   }
 
-  @GetMapping("/nowPlaying")
-  private ResponseEntity<List<Movie>> getAllMoviesPlaying() {
-    try {
-      return new ResponseEntity(movieService.getNowPlaying(), HttpStatus.OK);
-    } catch (Exception e) {
-      return new ResponseEntity(e.getCause().toString(), HttpStatus.NOT_FOUND);
-    }
-  }
 
-  @GetMapping("/premiere")
-  private ResponseEntity<List<Movie>> getAllMoviesPremiere() {
-    try {
-      return new ResponseEntity(movieService.getPremiere(), HttpStatus.OK);
-    } catch (Exception e) {
-      return new ResponseEntity(e.getCause().toString(), HttpStatus.NOT_FOUND);
-    }
-  }
+
+
   // FIN SERVICIOS PENDIENTES PROXIMA ITERACION
 }
