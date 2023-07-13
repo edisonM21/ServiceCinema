@@ -5,7 +5,6 @@ import com.cinema.globant.microservicesCinema.dto.Result;
 import com.cinema.globant.microservicesCinema.dto.movies.MovieResponseDto;
 import com.cinema.globant.microservicesCinema.dto.movies.NewMovieRequestDto;
 import com.cinema.globant.microservicesCinema.dto.movies.UpdateMovieRequestDto;
-import com.cinema.globant.microservicesCinema.entities.Movie;
 import com.cinema.globant.microservicesCinema.services.MovieService;
 import com.cinema.globant.microservicesCinema.validator.MovieRequestValidator;
 import jakarta.persistence.EntityManager;
@@ -23,6 +22,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 
 @RestController
 // Ejercicio completar Javadoc EN INGLES
@@ -46,6 +46,7 @@ public class MovieController {
     }
 
   // INICIO SERVICIOS CRUD
+
 
   /**
    * Devuelve todas las películas
@@ -190,6 +191,7 @@ public class MovieController {
       return new ResponseEntity(movieService.getMovieList(region, release_date, vote_average), HttpStatus.OK);
     } catch (Exception e) {
       return new ResponseEntity(e.getCause().toString(), HttpStatus.NOT_FOUND);
+
     }
   }
   // FIN SERVICIOS PENDIENTES PROXIMA ITERACION

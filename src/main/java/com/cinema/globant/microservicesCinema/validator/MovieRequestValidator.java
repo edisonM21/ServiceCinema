@@ -103,7 +103,7 @@ public class MovieRequestValidator {
           || dto.getOriginalLanguage().trim().isEmpty()) {
         errors.add("Original language cannot be empty");
       } else if (dto.getOriginalLanguage().trim().length() != 2) {
-        errors.add("Language code must have two letters");
+        errors.add("Original Language code must have two letters");
       }
       if (StringUtils.isEmpty(dto.getLocalTitle())
           || dto.getLocalTitle().trim().isEmpty()) {

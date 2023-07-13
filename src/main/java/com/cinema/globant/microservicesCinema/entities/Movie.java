@@ -105,4 +105,5 @@ public class Movie {
     // is the movie currently in theaters?
     @Column(name="movie_now_playing", nullable = false)
     private Boolean nowPlaying = false;
+
 }
