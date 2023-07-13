@@ -2,76 +2,108 @@ package com.cinema.globant.microservicesCinema.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.*;
+import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 
-import java.util.ArrayList;
-
-@Getter
-@Setter
 @Entity
-@Table(name = "moviesResult")
+@Table(name = "movies")
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
+@Getter
+@Setter
 public class Movie {
+    // Convención
+    // Los atributos de las clases siempre en CAMEL CASE
+    // nombre de las columnas y tablas de BD siempre SNAKE_CASE, como prefijo el nombre de la tabla
+    // En los tipos base es preferible usar los envoltorios objeto, para manejar nulos adecuadamente
+    // Ejemplo usar
+    // Integer en vez de int
+    // Double en vez de double
+    // Boolean en vez de boolean, etc.
+
+    /*
+     * En la anotación column, el valor nullable = false indica que en BD no pueden haber nulos
+     * si no está por defecto nullable = true y el campo puede tener valores nulos
+     *
+     * Esto se puede hacer también en la anotación table a través del atributo uniqueConstraints
+     */
+
+    // database Id primary key
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "native")
-    public long movie_id;
+    @GenericGenerator(name = "native", strategy = "native")
+    @Column(name="movie_id")
+    private Long id;
 
-    @Column(nullable = false)
-    public boolean adult;
+    // is the movie only for adults
+    @Column(name="movie_adult", nullable = false)
+    private Boolean adult = false;
 
-    @NotEmpty
-    @Column(nullable= false)
-    public String backdrop_path;
+    // poster image path
+    @Column(name="movie_backdrop_path")
+    private String backdropPath;
 
-    @NotNull
-    @Column(nullable= false)
-    public ArrayList<Integer> genre_ids;
+    // id in external API
+    @Column(name="movie_api_id", nullable = false)
+    private Integer apiId = 0;
 
-    @Min(value = 1)
-    @Column(name = "id_api", nullable= false, unique = true)
-    public int id;
+    // original language of the movie
+    @Column(name="movie_original_language", nullable = false, length = 2)
+    private String originalLanguage;
 
-    @NotEmpty
-    @Column(nullable= false, length = 2)
-    public String original_language;
+    // original title of the movie
+    @Column(name="movie_original_title", nullable = false, length = 200)
+    private String originalTitle;
 
-    @NotEmpty
-    @Column(nullable= false)
-    public String original_title;
+    // ColumnDefinition es si quiere forzar un tipo específico del motor sql
+    // en este caso especifico tipo TEXT de mySQL que son texto de hasta 65Kb
+    // overview of the movie
+    @Column(name="movie_overview", nullable = false,  columnDefinition = "text")
+    private String overview;
 
-    @NotEmpty
-    @Column(nullable= false,columnDefinition="text")
-    public String overview;
+    // popularity of the movie
+    private Double popularity = 0.0D;
 
-    @DecimalMin(value = "0.1")
-    @Column(nullable= false)
-    public double popularity;
+    // path of the poster image
+    @Column(name="movie_poster_path", nullable = false)
+    private String posterPath;
 
-    @NotEmpty
-    @Column(nullable= false)
-    public String poster_path;
+    /*
+    *  Siempre los titulos deben setearse del tipo que es
+    * Un tipo fecha va como fecha
+    * */
+    // release date of the movie
+    // Anotación temporal quizás necesaria en versiones anteriores
+    // es opcional pero da una marca de qué tipo de tiempo se almacena
+    // release date or null if it not now
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="movie_release_date", columnDefinition = "TIMESTAMP")
+    private LocalDateTime releaseDate;
 
-    @NotEmpty
-    @Column(name = "date_movie", nullable= false)
-    public String release_date;
+    // title of the movie in local language
+    @Column(name="movie_title", nullable = false, length = 200)
+    private String title;
 
-    @NotEmpty
-    @Column(nullable= false)
-    public String title;
+    // does the movie has video version?
+    @Column(name="movie_video", nullable = false)
+    private Boolean  video = false;
 
-    @Column(nullable= false)
-    public boolean video;
+    // average of user voting
+    @Column(name="movie_vote_average", nullable = false)
+    private Double voteAverage = 0.0;
 
-    @DecimalMin(value = "0.1")
-    @Column(nullable= false)
-    public double vote_average;
+    // total votes
+    @Column(name="movie_vote_count", nullable = false)
+    private Integer voteCount = 0;
 
-    @Min(value = 0)
-    @Column(nullable= false)
-    public int vote_count;
-
-    @Column(nullable= false)
-    public boolean nowPlaying = false;
+    // is the movie currently in theaters?
+    @Column(name="movie_now_playing", nullable = false)
+    private Boolean nowPlaying = false;
 
 }
