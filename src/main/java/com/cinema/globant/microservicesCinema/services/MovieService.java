@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+
 /**
  * Clase servicio para las operaciones CRUD de películas
  */
@@ -24,6 +25,7 @@ import org.springframework.web.client.RestTemplate;
 // Ejercicio completar Javadoc EN INGLES
 
 public class MovieService {
+
   private final MoviesRepository moviesRepository;
   private final RestTemplate restTemplate;
   private final String basePathDiscover;
@@ -90,6 +92,7 @@ public class MovieService {
 //        .orElseThrow(() -> new MovieNotFoundException(id));
   }
 
+
   /**
    * Devuelve todas las películas sin filtros
    *
@@ -122,6 +125,7 @@ public class MovieService {
           .build());
     }
     return result;
+
 
     // Forma funcional
 
@@ -174,6 +178,7 @@ public class MovieService {
               .voteAverage(m.getVoteAverage())
               .voteCount(m.getVoteCount())
               .build());
+
     }
     return result;
   }
@@ -205,6 +210,7 @@ public class MovieService {
               .voteAverage(m.getVoteAverage())
               .voteCount(m.getVoteCount())
               .build());
+
     }
     return result;
   }
@@ -319,6 +325,7 @@ public class MovieService {
     Response response = restTemplate.getForObject(basePathDiscover + "/movie?region=" + region + "&release_date.gte=" + release_date + "&vote_average.gte=" + vote_average + key, Response.class);
     if (response != null) {
       resultList.addAll(response.results);
+
     }
 
     // TODO: El servicio DEBE devolver lista de Moviw

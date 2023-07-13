@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
-import java.util.ArrayList;
-
 @Entity
 @Table(name = "movies")
 @AllArgsConstructor
@@ -107,4 +105,5 @@ public class Movie {
     // is the movie currently in theaters?
     @Column(name="movie_now_playing", nullable = false)
     private Boolean nowPlaying = false;
+
 }

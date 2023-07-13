@@ -2,7 +2,6 @@ package com.cinema.globant.microservicesCinema.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +11,7 @@ import lombok.NoArgsConstructor;
  * Base response with code message and timestamp for POST endpoint
  * or error cases as well
  */
+
 @Builder
 @Data
 @AllArgsConstructor
@@ -34,4 +34,5 @@ public class BaseResponseDto {
   // Timestamp of action with local server time
   @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", shape = JsonFormat.Shape.STRING)
   private LocalDateTime timeStamp;
+
 }
