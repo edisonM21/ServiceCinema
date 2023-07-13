@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class ValidationException extends RuntimeException {
   public ValidationException(String errors) {
-    super("Request no válido, no se pudo completar la acción. Errores de validación: " + errors, null);
+    super("Invalid request, the action could not be completed. Validation errors: " + errors, null);
   }
 }

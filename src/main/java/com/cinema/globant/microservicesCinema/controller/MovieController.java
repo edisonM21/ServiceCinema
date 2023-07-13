@@ -8,6 +8,7 @@ import com.cinema.globant.microservicesCinema.dto.movies.UpdateMovieRequestDto;
 import com.cinema.globant.microservicesCinema.entities.Movie;
 import com.cinema.globant.microservicesCinema.services.MovieService;
 import com.cinema.globant.microservicesCinema.validator.MovieRequestValidator;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import java.time.LocalDateTime;
@@ -30,6 +31,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class MovieController {
   private MovieService movieService;
   private MovieRequestValidator validator;
+
+  private EntityManager entityManager;
 
   /**
    * Constructor Inyección de dependencias
@@ -98,7 +101,7 @@ public class MovieController {
         BaseResponseDto
             .builder()
             .code("NEW_MOVIE")
-            .message("Succesfully created movie record id=" + id)
+            .message("Succesfully created movie record id= " + id)
             .timeStamp(LocalDateTime.now())
             .build();
 
@@ -131,7 +134,7 @@ public class MovieController {
         BaseResponseDto
             .builder()
             .code("UPDATE_MOVIE")
-            .message("Succesfully updated movie record id=" + id)
+            .message("Succesfully updated movie record id= " + id)
             .timeStamp(LocalDateTime.now())
             .build();
 
@@ -162,7 +165,7 @@ public class MovieController {
         BaseResponseDto
             .builder()
             .code("DELETE_MOVIE")
-            .message("Succesfully deleted movie record id=" + id)
+            .message("Succesfully deleted movie record id= " + id)
             .timeStamp(LocalDateTime.now())
             .build();
 
@@ -189,9 +192,5 @@ public class MovieController {
       return new ResponseEntity(e.getCause().toString(), HttpStatus.NOT_FOUND);
     }
   }
-
-
-
-
   // FIN SERVICIOS PENDIENTES PROXIMA ITERACION
 }

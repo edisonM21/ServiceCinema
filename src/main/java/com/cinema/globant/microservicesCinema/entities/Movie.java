@@ -1,7 +1,6 @@
 package com.cinema.globant.microservicesCinema.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
-import java.util.ArrayList;
 
 @Entity
 @Table(name = "movies")
