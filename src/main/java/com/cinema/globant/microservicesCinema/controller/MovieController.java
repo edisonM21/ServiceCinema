@@ -158,26 +158,14 @@ public class MovieController {
    */
   @DeleteMapping("/delete/{id}")
   public ResponseEntity<BaseResponseDto> deleteMovie(@Valid @PathVariable("id") long id) {
-
-    movieService.deleteMovie(id);
-
+    return ResponseEntity.ok(movieService.deleteMovie(id));
     // se devuelve el mensaje Ok con el id de la pelicula
-    BaseResponseDto response =
-        BaseResponseDto
-            .builder()
-            .code("DELETE_MOVIE")
-            .message("Succesfully deleted movie record id= " + id)
-            .timeStamp(LocalDateTime.now())
-            .build();
-
     // cuando se actualiza o borra exitosamente se devuelve un endpoint con estatus 200- OK
     // por lo general no se devuelve nada en el cuerpo
     // pero se puede ussar el cuerpo para devolver
     // TODO: Otro código http usual a devolver es 204 - No Content, que indica que el request viene vacío
     // TODO: pero la operación fue exitosa, en este caso se devolvería un ResponseEntity vacío
     // TODO: Valorar con el grupo de Frontend si este enfoque es más viable.
-    return ResponseEntity.ok(response);
-
   }
 
 

@@ -1,5 +1,6 @@
 package com.cinema.globant.microservicesCinema.services;
 
+import com.cinema.globant.microservicesCinema.dto.BaseResponseDto;
 import com.cinema.globant.microservicesCinema.dto.Response;
 import com.cinema.globant.microservicesCinema.dto.Result;
 import com.cinema.globant.microservicesCinema.dto.movies.MovieResponseDto;
@@ -9,6 +10,8 @@ import com.cinema.globant.microservicesCinema.entities.Movie;
 import com.cinema.globant.microservicesCinema.exceptions.MovieNotFoundException;
 import com.cinema.globant.microservicesCinema.repositories.MoviesRepository;
 import jakarta.transaction.Transactional;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -306,10 +309,20 @@ public class MovieService {
   // TODO: Implementar borrado lógico, es decir que no se borre el registro de BD, sino haya un flag deleted y el
   // TODO: borrado sería actualizar el flag sin eliminar el dato de tabla
   @Transactional
-  public Long deleteMovie(Long id) {
+  public BaseResponseDto deleteMovie(Long id) {
     // TODO: Ver si es realmente necesario devolver el ID
-    moviesRepository.deleteById(id);
-    return id;
+    Optional<Movie> optMovie = moviesRepository.findById(id);
+    if (optMovie.isPresent()) {
+      moviesRepository.deleteById(id);
+      return BaseResponseDto
+                      .builder()
+                      .code("DELETE_MOVIE")
+                      .message("Succesfully deleted movie record id= " + id)
+                      .timeStamp(LocalDateTime.now())
+                      .build();
+    }else {
+      throw new MovieNotFoundException(id);
+    }
   }
 
   // FIN SERVICIOS CRUD
