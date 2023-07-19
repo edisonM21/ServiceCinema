@@ -1,5 +1,7 @@
 package com.cinema.globant.microservicesCinema.services;
 
+import com.cinema.globant.microservicesCinema.converte.MovieConverte;
+import com.cinema.globant.microservicesCinema.dto.BaseResponseDto;
 import com.cinema.globant.microservicesCinema.dto.Response;
 import com.cinema.globant.microservicesCinema.dto.Result;
 import com.cinema.globant.microservicesCinema.dto.movies.MovieResponseDto;
@@ -9,6 +11,8 @@ import com.cinema.globant.microservicesCinema.entities.Movie;
 import com.cinema.globant.microservicesCinema.exceptions.MovieNotFoundException;
 import com.cinema.globant.microservicesCinema.repositories.MoviesRepository;
 import jakarta.transaction.Transactional;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +34,8 @@ public class MovieService {
   private final RestTemplate restTemplate;
   private final String basePathDiscover;
   private final String key;
+
+  private  MovieConverte movieConverte;
 
   /**
    * Constructor Inyección de dependencias
@@ -63,34 +69,15 @@ public class MovieService {
     // EJERCICIO crear convertidor
     Optional<Movie> optMovie = moviesRepository.findById(id);
 
-    if (optMovie.isPresent()) {
-      Movie m = optMovie.get();
-      return
-          MovieResponseDto
-              .builder()
-              .id(m.getId())
-              .originalTitle(m.getOriginalTitle())
-              .originalLanguage(m.getOriginalLanguage())
-              .localTitle(m.getTitle())
-              .overview(m.getOverview())
-              .isForAdults(m.getAdult())
-              .nowPlaying(m.getNowPlaying())
-              .releaseDate(m.getReleaseDate())
-              .apiId(m.getApiId())
-              .hasVideo(m.getVideo())
-              .popularity(m.getPopularity())
-              .voteAverage(m.getVoteAverage())
-              .voteCount(m.getVoteCount())
-              .build();
+    MovieConverte converter = new MovieConverte();
 
-    } else {
-      throw new MovieNotFoundException(id);
+    return converter.convertToMovieResponseDtoId(optMovie);
+
     }
     // TODO: Estudiar el tema funcional en java y comprender el  funcionamiento
 //    return moviesRepository
 //        .findById(id)
 //        .orElseThrow(() -> new MovieNotFoundException(id));
-  }
 
 
   /**
@@ -102,53 +89,10 @@ public class MovieService {
     // Forma básica con ciclos
     // buscar lista de BD
     List<Movie> movies =  moviesRepository.findAll();
-    // armar la lista convertida
-    List<MovieResponseDto> result = new ArrayList<>();
-    // se itera y se crea lista
-    for (Movie m : movies) {
-      // Ejercicio: Usar convertidor
-      result.add(MovieResponseDto
-          .builder()
-          .id(m.getId())
-          .originalTitle(m.getOriginalTitle())
-          .originalLanguage(m.getOriginalLanguage())
-          .localTitle(m.getTitle())
-          .overview(m.getOverview())
-          .isForAdults(m.getAdult())
-          .nowPlaying(m.getNowPlaying())
-          .releaseDate(m.getReleaseDate())
-          .apiId(m.getApiId())
-          .hasVideo(m.getVideo())
-          .popularity(m.getPopularity())
-          .voteAverage(m.getVoteAverage())
-          .voteCount(m.getVoteCount())
-          .build());
-    }
-    return result;
 
+    MovieConverte converter = new MovieConverte();
 
-    // Forma funcional
-
-//    return moviesRepository
-//        .findAll()
-//        .stream()
-//        .map(m ->  MovieResponseDto
-//            .builder()
-//            .id(m.getId())
-//            .originalTitle(m.getOriginalTitle())
-//            .originalLanguage(m.getOriginalLanguage())
-//            .localTitle(m.getTitle())
-//            .overview(m.getOverview())
-//            .isForAdults(m.getAdult())
-//            .nowPlaying(m.getNowPlaying())
-//            .releaseDate(m.getReleaseDate())
-//            .apiId(m.getApiId())
-//            .hasVideo(m.getVideo())
-//            .popularity(m.getPopularity())
-//            .voteAverage(m.getVoteAverage())
-//            .voteCount(m.getVoteCount())
-//            .build())
-//        .collect(Collectors.toList());
+    return converter.convertToMovieResponseDtoList(movies);
   }
 
 
@@ -156,63 +100,25 @@ public class MovieService {
   // TODO: En el modelo de BD debe crearse entidades que reflejen la proyección de una película
   // TODO: y si está en cartelera o no, podría ser con fechas de entrada y salida de cartelera de la película
   public List<MovieResponseDto> getNowPlaying() {
-    List<Movie> movies = moviesRepository.findAllByNowPlaying(true);
-    // armar la lista convertida
-    List<MovieResponseDto> result = new ArrayList<>();
-    // se itera y se crea lista
-    for (Movie m : movies) {
-      // Ejercicio: Usar convertidor
-      result.add(MovieResponseDto
-              .builder()
-              .id(m.getId())
-              .originalTitle(m.getOriginalTitle())
-              .originalLanguage(m.getOriginalLanguage())
-              .localTitle(m.getTitle())
-              .overview(m.getOverview())
-              .isForAdults(m.getAdult())
-              .nowPlaying(m.getNowPlaying())
-              .releaseDate(m.getReleaseDate())
-              .apiId(m.getApiId())
-              .hasVideo(m.getVideo())
-              .popularity(m.getPopularity())
-              .voteAverage(m.getVoteAverage())
-              .voteCount(m.getVoteCount())
-              .build());
 
-    }
-    return result;
+    List<Movie> movies = moviesRepository.findAllByNowPlaying(true);
+
+    MovieConverte converter = new MovieConverte();
+
+    return converter.convertToMovieResponseDtoList(movies);
   }
+
 
   // TODO: Tiene sentido el flag del API para saber si la película está en estreno?
   // TODO: En el modelo de BD debe crearse entidades que reflejen la proyección de una película
   // TODO: y si está en cartelera o no, podría ser con fechas de entrada y salida de cartelera de la película
-
   public List<MovieResponseDto> getPremiere() {
-    List<Movie> movies = moviesRepository.findAllByNowPlaying(false);
-    // armar la lista convertida
-    List<MovieResponseDto> result = new ArrayList<>();
-    // se itera y se crea lista
-    for (Movie m : movies) {
-      // Ejercicio: Usar convertidor
-      result.add(MovieResponseDto
-              .builder()
-              .id(m.getId())
-              .originalTitle(m.getOriginalTitle())
-              .originalLanguage(m.getOriginalLanguage())
-              .localTitle(m.getTitle())
-              .overview(m.getOverview())
-              .isForAdults(m.getAdult())
-              .nowPlaying(m.getNowPlaying())
-              .releaseDate(m.getReleaseDate())
-              .apiId(m.getApiId())
-              .hasVideo(m.getVideo())
-              .popularity(m.getPopularity())
-              .voteAverage(m.getVoteAverage())
-              .voteCount(m.getVoteCount())
-              .build());
 
-    }
-    return result;
+    List<Movie> movies = moviesRepository.findAllByNowPlaying(false);
+
+    MovieConverte converter = new MovieConverte();
+
+    return converter.convertToMovieResponseDtoList(movies);
   }
 
   /**
@@ -306,10 +212,15 @@ public class MovieService {
   // TODO: Implementar borrado lógico, es decir que no se borre el registro de BD, sino haya un flag deleted y el
   // TODO: borrado sería actualizar el flag sin eliminar el dato de tabla
   @Transactional
-  public Long deleteMovie(Long id) {
+  public BaseResponseDto deleteMovie(Long id) {
     // TODO: Ver si es realmente necesario devolver el ID
-    moviesRepository.deleteById(id);
-    return id;
+      moviesRepository.deleteById(id);
+      return BaseResponseDto
+                      .builder()
+                      .code("DELETE_MOVIE")
+                      .message("Succesfully deleted movie record id= " + id)
+                      .timeStamp(LocalDateTime.now())
+                      .build();
   }
 
   // FIN SERVICIOS CRUD
