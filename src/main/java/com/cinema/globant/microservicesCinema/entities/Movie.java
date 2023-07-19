@@ -58,7 +58,7 @@ public class Movie {
     private String originalLanguage;
 
     // original title of the movie
-    @Column(name="movie_original_title", nullable = false, length = 200)
+    @Column(name="movie_original_title", nullable = false, length = 50)
     private String originalTitle;
 
     // ColumnDefinition es si quiere forzar un tipo específico del motor sql
@@ -87,7 +87,7 @@ public class Movie {
     private LocalDateTime releaseDate;
 
     // title of the movie in local language
-    @Column(name="movie_title", nullable = false, length = 200)
+    @Column(name="movie_title", nullable = false, length = 50)
     private String title;
 
     // does the movie has video version?
