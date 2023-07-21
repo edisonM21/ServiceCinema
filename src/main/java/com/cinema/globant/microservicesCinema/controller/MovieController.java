@@ -27,6 +27,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 // Ejercicio completar Javadoc EN INGLES
 
+/**
+ * Controller class
+ */
+
 @RequestMapping("/cinema/v1/movie")
 public class MovieController {
   private MovieService movieService;
@@ -34,7 +38,7 @@ public class MovieController {
 
 
   /**
-   * Constructor Inyección de dependencias
+   * dependency injection constructor
    *
    * @param movieService
    * @param validator
@@ -48,7 +52,7 @@ public class MovieController {
 
 
   /**
-   * Devuelve todas las películas
+   * Returns all movie
    *
    * @return
    */
@@ -57,18 +61,26 @@ public class MovieController {
     return ResponseEntity.ok(movieService.getAllList());
   }
 
+  /**
+   * Returns all movies in billboard
+   * @return
+   */
   @GetMapping("/nowPlaying")
   public ResponseEntity<List<MovieResponseDto>> getAllMoviesPlaying() {
     return  ResponseEntity.ok(movieService.getNowPlaying());
   }
 
+  /**
+   * Returns all movies in billboard
+   * @return
+   */
   @GetMapping("/premiere")
   public ResponseEntity<List<MovieResponseDto>> getAllPremiere() {
     return ResponseEntity.ok(movieService.getPremiere());
   }
 
   /**
-   * Devuelve película por Id
+   * Returns movie by Id
    *
    * @param id
    * @return
@@ -81,8 +93,8 @@ public class MovieController {
   }
 
   /**
-   * Crea una nueva película
-   * y devuelve un objeto de respuesta genérica con el mensaje de creación
+   * Create a new movie validating all its fields
+   * and returns a generic response object with the create message
    *
    * @param movieDto
    * @return
@@ -114,8 +126,8 @@ public class MovieController {
   }
 
   /**
-   * Actualizar pelicula por ID
-   * Se devuelve mensaje generico indicando que se actualizó la película
+   * Update a new movie validating all its fields
+   * and returns a generic response object with the update message
    *
    * @param id
    * @param movieDto
@@ -150,8 +162,8 @@ public class MovieController {
   }
 
   /**
-   * Borrar pelicula por ID
-   * Se devuelve mensaje generico indicando que se actualizó la película
+   * Delete a new movie validating all its fields
+   * and returns a generic response object with the delete message
    *
    * @param id
    * @return

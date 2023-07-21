@@ -23,7 +23,7 @@ import org.springframework.web.client.RestTemplate;
 
 
 /**
- * Clase servicio para las operaciones CRUD de películas
+ * Service class for film CRUD operations
  */
 @Service
 // Ejercicio completar Javadoc EN INGLES
@@ -38,7 +38,7 @@ public class MovieService {
   private  MovieConverte movieConverte;
 
   /**
-   * Constructor Inyección de dependencias
+   * dependency injection constructor
    *
    * @param moviesRepository
    * @param restTemplate
@@ -59,7 +59,8 @@ public class MovieService {
   // INICIO SERVICIOS CRUD
 
   /**
-   * buscar pelicula por ID
+   * search movie by id
+   * assumes id validation
    *
    * @param id
    * @return
@@ -81,7 +82,7 @@ public class MovieService {
 
 
   /**
-   * Devuelve todas las películas sin filtros
+   * Return all movies without filter
    *
    * @return
    */
@@ -99,6 +100,12 @@ public class MovieService {
   // TODO: Tiene sentido el flag del API para saber si la película está siendo proyecteada?
   // TODO: En el modelo de BD debe crearse entidades que reflejen la proyección de una película
   // TODO: y si está en cartelera o no, podría ser con fechas de entrada y salida de cartelera de la película
+
+  /**
+   * Returns the billboard movies
+   *
+   * @return
+   */
   public List<MovieResponseDto> getNowPlaying() {
 
     List<Movie> movies = moviesRepository.findAllByNowPlaying(true);
@@ -112,6 +119,12 @@ public class MovieService {
   // TODO: Tiene sentido el flag del API para saber si la película está en estreno?
   // TODO: En el modelo de BD debe crearse entidades que reflejen la proyección de una película
   // TODO: y si está en cartelera o no, podría ser con fechas de entrada y salida de cartelera de la película
+
+  /**
+   * Returns the premiere movies
+   *
+   * @return
+   */
   public List<MovieResponseDto> getPremiere() {
 
     List<Movie> movies = moviesRepository.findAllByNowPlaying(false);
@@ -122,12 +135,12 @@ public class MovieService {
   }
 
   /**
-   * Crea una nueva película
+   * Create a new movie
    * <p>
-   * Se asume el dto ya válido y no nulo
+   * assumes dto already validated and not null
    *
    * @param dto
-   * @return Id de la nueva película creada en BD
+   * @return id of the new movie created in BD
    */
   @Transactional
   public Long createNewMovie(NewMovieRequestDto dto) {
@@ -160,12 +173,13 @@ public class MovieService {
   }
 
   /**
-   * Actualiza una película existente
+   * Update a movie existing
    * <p>
-   * Se asume el dto ya válido y no nulo
+   * assumes dto already validated and not null
+   * assumes the Id already valid
    *
    * @param dto
-   * @return Id de la nueva película actualizada en BD que es el mismo del DTO
+   * @return Id of the new updated movie in BD that is the same as the DTO
    */
   @Transactional
   public Long updateMovie(UpdateMovieRequestDto dto) {
@@ -204,7 +218,9 @@ public class MovieService {
   }
 
   /**
-   * Elimina película por ID
+   * Delete movie by ID
+   * assumes the Id already valid
+   * and returns a generic response object with the delete message
    *
    * @param id
    * @return

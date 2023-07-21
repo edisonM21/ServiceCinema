@@ -34,6 +34,11 @@ public class MovieRequestValidator {
         this.repository = repository;
     }
 
+    /**
+     * The fields of the NewMovieRequestDto Dto are validated
+     *
+     * @param dto
+     */
     public void validateNewMovieDto(NewMovieRequestDto dto) {
         List<String> errors = new ArrayList<>();
 
@@ -87,6 +92,12 @@ public class MovieRequestValidator {
             throw new ValidationException(errors.stream().collect(Collectors.joining(", ")));
         }
     }
+
+    /**
+     * The fields of the UpdateMovieRequestDto Dto are validated
+     *
+     * @param dto
+     */
 
     public void validateUpdateMovieDto(UpdateMovieRequestDto dto) {
         List<String> errors = new ArrayList<>();
@@ -160,6 +171,10 @@ public class MovieRequestValidator {
         }
     }
 
+    /**
+     * It is validated if the id is negative and exists in the database
+     * @param id
+     */
     public void validateIdMovie(Long id) {
         List<String> errors = new ArrayList<>();
         if (id <= 0) {

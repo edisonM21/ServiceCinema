@@ -7,7 +7,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+
+/**
+ * Converte class
+ */
 public class MovieConverte {
+
+    /**
+     * converter to return list of movies
+     *
+     * @param movies
+     * @return
+     */
 
     public List<MovieResponseDto> convertToMovieResponseDtoList(List<Movie> movies) {
         List<MovieResponseDto> result = new ArrayList<>();
@@ -37,6 +48,13 @@ public class MovieConverte {
                 .build();
     }
 
+
+    /**
+     * Converter to return a movie
+     *
+     * @param movies
+     * @return
+     */
     public static MovieResponseDto convertToMovieResponseDtoId(Optional<Movie> movies) {
             Movie m = movies.get();
             return MovieResponseDto
