@@ -1,7 +1,9 @@
 package com.cinema.globant.microservicesCinema.validator;
 
+import com.cinema.globant.microservicesCinema.dto.movies.GenreRequestDto;
 import com.cinema.globant.microservicesCinema.dto.movies.NewMovieRequestDto;
 import com.cinema.globant.microservicesCinema.dto.movies.UpdateMovieRequestDto;
+import com.cinema.globant.microservicesCinema.exceptions.GenreNotFoundException;
 import com.cinema.globant.microservicesCinema.exceptions.MovieNotFoundException;
 import com.cinema.globant.microservicesCinema.exceptions.ValidationException;
 
@@ -9,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.cinema.globant.microservicesCinema.repositories.GenreRepository;
 import com.cinema.globant.microservicesCinema.repositories.MoviesRepository;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
@@ -28,10 +31,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class MovieRequestValidator {
 
-    private MoviesRepository repository;
+    private MoviesRepository moviesRepository;
+    private GenreRepository genreRepository;
 
-    public MovieRequestValidator(MoviesRepository repository) {
-        this.repository = repository;
+    public MovieRequestValidator(MoviesRepository repository, GenreRepository genreRepository) {
+        this.moviesRepository = repository;
+        this.genreRepository = genreRepository;
     }
 
     /**
@@ -46,6 +51,9 @@ public class MovieRequestValidator {
          * Se valida cada campo y si hay errores se agrega a la lista
          */
         // validate dto is not null
+        for (GenreRequestDto genre : dto.getGenres()){
+            validateIdGenre(genre);
+        }
         if (dto == null) {
             errors.add("Movie Request DTO is not ");
         } else {
@@ -55,6 +63,12 @@ public class MovieRequestValidator {
                 errors.add("Original title cannot be empty");
             } else if (dto.getOriginalTitle().trim().length() > 50) {
                 errors.add("The original title is too long");
+            }
+            //genres
+            if (dto.getGenres().isEmpty()){
+                errors.add("The genre list cannot be empty");
+            } else if (dto.getGenres() == null) {
+                errors.add("Genres no puede ser null");
             }
             // original language
             if (StringUtils.isEmpty(dto.getOriginalLanguage())
@@ -179,8 +193,21 @@ public class MovieRequestValidator {
         List<String> errors = new ArrayList<>();
         if (id <= 0) {
             errors.add("Negative IDs or equal to zero are not allowed");
-        } else if (!repository.existsById(id)) {
+        } else if (!moviesRepository.existsById(id)) {
             throw new MovieNotFoundException(id);
+        }
+        if (!errors.isEmpty()) {
+            throw new ValidationException(errors.stream().collect(Collectors.joining(", ")));
+        }
+    }
+
+    public void validateIdGenre(GenreRequestDto m) {
+        List<String> errors = new ArrayList<>();
+
+        if (m.getId() <= 0) {
+            errors.add("Negative IDs or equal to zero are not allowed");
+        } else if (!genreRepository.existsById(m.getId())) {
+            throw new GenreNotFoundException(m.getId());
         }
         if (!errors.isEmpty()) {
             throw new ValidationException(errors.stream().collect(Collectors.joining(", ")));

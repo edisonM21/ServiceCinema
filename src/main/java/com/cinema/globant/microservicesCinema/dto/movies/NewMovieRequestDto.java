@@ -1,5 +1,6 @@
 package com.cinema.globant.microservicesCinema.dto.movies;
 
+import com.cinema.globant.microservicesCinema.entities.Genre;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
@@ -12,6 +13,8 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -40,6 +43,8 @@ public class NewMovieRequestDto {
   private Boolean isForAdults;
   // flag if movie is currently playing
   private Boolean nowPlaying;
+  // List genres
+  private List<GenreRequestDto> genres;
   // Id on API or null if its unknown
   private Integer apiId;
   // release date or null if movie is not known yet

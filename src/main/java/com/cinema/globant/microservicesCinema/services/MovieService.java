@@ -4,11 +4,14 @@ import com.cinema.globant.microservicesCinema.converte.MovieConverte;
 import com.cinema.globant.microservicesCinema.dto.BaseResponseDto;
 import com.cinema.globant.microservicesCinema.dto.Response;
 import com.cinema.globant.microservicesCinema.dto.Result;
+import com.cinema.globant.microservicesCinema.dto.movies.GenreRequestDto;
 import com.cinema.globant.microservicesCinema.dto.movies.MovieResponseDto;
 import com.cinema.globant.microservicesCinema.dto.movies.NewMovieRequestDto;
 import com.cinema.globant.microservicesCinema.dto.movies.UpdateMovieRequestDto;
+import com.cinema.globant.microservicesCinema.entities.Genre;
 import com.cinema.globant.microservicesCinema.entities.Movie;
 import com.cinema.globant.microservicesCinema.exceptions.MovieNotFoundException;
+import com.cinema.globant.microservicesCinema.repositories.GenreRepository;
 import com.cinema.globant.microservicesCinema.repositories.MoviesRepository;
 import jakarta.transaction.Transactional;
 
@@ -30,6 +33,8 @@ import org.springframework.web.client.RestTemplate;
 
 public class MovieService {
 
+
+  private final GenreRepository genreRepository;
   private final MoviesRepository moviesRepository;
   private final RestTemplate restTemplate;
   private final String basePathDiscover;
@@ -47,12 +52,14 @@ public class MovieService {
    */
   public MovieService(
       MoviesRepository moviesRepository,
+      GenreRepository genreRepository,
       RestTemplate restTemplate,
       @Value("${spring.external.service.base-url2}") String basePathDiscover,
       @Value("${spring.external.service.base-key}") String key) {
     this.moviesRepository = moviesRepository;
     this.restTemplate = restTemplate;
     this.basePathDiscover = basePathDiscover;
+    this.genreRepository = genreRepository;
     this.key = key;
   }
 
@@ -146,6 +153,12 @@ public class MovieService {
   public Long createNewMovie(NewMovieRequestDto dto) {
     // conversión
     // EJERCICIO Crear convertidor con MapStruct
+
+    List<Genre> genres = new ArrayList<>();
+    for (GenreRequestDto g : dto.getGenres() ){
+      genres.add(genreRepository.findById(g.getId()).get());
+    }
+
     Movie m = Movie
         .builder()
         .adult(dto.getIsForAdults())
@@ -155,6 +168,7 @@ public class MovieService {
         .title(dto.getLocalTitle().trim()) // TODO: Pensar esquema para llevar a títulos a varios idiomas
         .overview(dto.getOverview().trim())
         .nowPlaying(dto.getNowPlaying())
+        .genres(genres)
         .releaseDate(dto.getReleaseDate())
 
         .backdropPath("")  // TODO: Revisar si realmente este campo tiene sentido

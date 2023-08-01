@@ -2,6 +2,10 @@ package com.cinema.globant.microservicesCinema.entities;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -105,5 +109,13 @@ public class Movie {
     // is the movie currently in theaters?
     @Column(name="movie_now_playing", nullable = false)
     private Boolean nowPlaying = false;
+
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @JoinTable(name = "movies_genres",
+            joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id")
+    )
+    private List<Genre> genres;
 
 }

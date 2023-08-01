@@ -2,6 +2,8 @@ package com.cinema.globant.microservicesCinema.dto.movies;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,6 +37,8 @@ public class MovieResponseDto {
   private LocalDateTime releaseDate;
   // Id on API or null if its unknown
   private Integer apiId;
+  //List genres
+  private List<GenreRequestDto> genres;
   // does the movie has video ?
   private Boolean  hasVideo;
   // popularity or 0 if is unknown

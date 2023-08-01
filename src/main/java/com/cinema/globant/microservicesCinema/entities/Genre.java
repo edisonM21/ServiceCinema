@@ -1,16 +1,12 @@
 package com.cinema.globant.microservicesCinema.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,7 +14,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "movie_genre")
+@Table(name = "genres")
 @Getter
 @Setter
 @Builder
@@ -29,7 +25,7 @@ public class Genre {
   @Id
   @Column(name="genre_id")
   @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "native")
-  private int id;
+  private Long id;
 
   // metadata en @Colum
   // unique porque hay un solo género con un nombre
@@ -42,5 +38,7 @@ public class Genre {
   @Column(name= "grenre_rate", nullable = false)
   private int rate = 0;
 
+  @ManyToMany(mappedBy = "genres")
+  private List<Movie> movies;
 
 }
