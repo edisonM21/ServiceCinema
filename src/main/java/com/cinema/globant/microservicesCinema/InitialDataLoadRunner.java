@@ -253,7 +253,7 @@ public class InitialDataLoadRunner implements CommandLineRunner {
                 .adult(true)
                 .apiId(0)
                 .originalLanguage("FR")
-                .originalTitle("La Chambre Des Marveilles")
+                .originalTitle("La Chambre Des Merveilles")
                 .title("El libro de los deseos")
                 .overview("Después de que un trágico accidente deja en coma a su hijo, Thelma decide completar una a una las 10 cosas que hay que hacer antes del fin del mundo\" que dejó el niño escrito en su diario. Esto con la esperanza de demostrarle todo lo maravilloso que ofrece la vida para que él decida regresar, y de paso reavivar sus propias ganas de vivir.")
                 .nowPlaying(false)

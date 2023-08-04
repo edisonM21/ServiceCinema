@@ -205,7 +205,7 @@ public class MovieRequestValidator {
         List<String> errors = new ArrayList<>();
 
         if (m.getId() <= 0) {
-            errors.add("Negative IDs or equal to zero are not allowed");
+            errors.add("Negative IDs genre or equal to zero are not allowed");
         } else if (!genreRepository.existsById(m.getId())) {
             throw new GenreNotFoundException(m.getId());
         }
